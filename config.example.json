@@ -1,0 +1,31 @@
+{
+  "pollingIntervalMinutes": 5,
+  "watches": [
+    {
+      "type": "on-sale",
+      "movieTitle": "Movie Title Here",
+      "comment": "Fires when this movie first appears in the Lincoln Square listing"
+    },
+    {
+      "type": "on-sale",
+      "movieTitle": "Another Movie",
+      "dates": ["2026-05-01", "2026-05-02"],
+      "comment": "Optional: only alert if tickets appear for these specific dates"
+    },
+    {
+      "type": "seat-available",
+      "movieTitle": "Movie Title Here",
+      "date": "2026-05-01",
+      "time": "7:00pm",
+      "format": "IMAX with Laser at AMC",
+      "comment": "Fires when this showtime is no longer sold out. format is optional."
+    }
+  ],
+  "notifications": {
+    "desktop": true,
+    "email": {
+      "enabled": false,
+      "to": "you@example.com"
+    }
+  }
+}

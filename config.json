@@ -1,0 +1,26 @@
+{
+  "theater": "amc-lincoln-square-13",
+  "pollingIntervalMinutes": 5,
+  "watches": [
+    {
+      "type": "on-sale",
+      "movieTitle": "Example Movie",
+      "comment": "Alerts when this movie first appears in the Lincoln Square showtimes listing"
+    },
+    {
+      "type": "seat-available",
+      "movieTitle": "Example Movie",
+      "date": "2026-04-15",
+      "time": "7:00pm",
+      "format": "IMAX with Laser at AMC",
+      "comment": "Alerts when this specific sold-out showtime has seats again"
+    }
+  ],
+  "notifications": {
+    "desktop": true,
+    "email": {
+      "enabled": false,
+      "to": "you@example.com"
+    }
+  }
+}
