@@ -9,7 +9,7 @@ const ROOT = resolve(__dirname, '..');
 export interface OnSaleWatch {
   type: 'on-sale';
   movieTitle: string;
-  dates?: string[];  // optional: only alert for these specific dates
+  releaseDate?: string;  // YYYY-MM-DD: the date the movie opens — fetches that page instead of today
 }
 
 export interface SeatWatch {
@@ -70,10 +70,20 @@ export function loadConfig(): Config {
     throw new Error('config.json: pollingIntervalMinutes must be >= 1');
   }
 
+  const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+
   for (const watch of raw.watches) {
     if (watch.type === 'seat-available') {
       if (!watch.date || !watch.time) {
         throw new Error(`seat-available watch for "${watch.movieTitle}" must have date and time`);
+      }
+      if (!dateFormat.test(watch.date)) {
+        throw new Error(`seat-available watch for "${watch.movieTitle}": date "${watch.date}" must be YYYY-MM-DD (e.g. 2026-09-12)`);
+      }
+    }
+    if (watch.type === 'on-sale') {
+      if (watch.releaseDate && !dateFormat.test(watch.releaseDate)) {
+        throw new Error(`on-sale watch for "${watch.movieTitle}": releaseDate "${watch.releaseDate}" must be YYYY-MM-DD (e.g. 2026-09-12)`);
       }
     }
   }

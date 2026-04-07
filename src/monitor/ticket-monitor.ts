@@ -19,8 +19,7 @@ export function checkOnSale(showtimes: Showtime[], watches: OnSaleWatch[]): Aler
 
   for (const watch of watches) {
     const matchingShowtimes = showtimes.filter(s =>
-      titleMatches(s.movieTitle, watch.movieTitle) &&
-      (watch.dates ? watch.dates.includes(s.date) : true)
+      titleMatches(s.movieTitle, watch.movieTitle)
     );
 
     if (matchingShowtimes.length === 0) continue;
