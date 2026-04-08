@@ -5,7 +5,7 @@ import { checkOnSale } from './monitor/ticket-monitor.js';
 import { checkSeats } from './monitor/seat-monitor.js';
 import { loadState, saveState } from './monitor/state.js';
 import { sendAlert } from './notify/notifier.js';
-import { log } from './utils/logger.js';
+import { log, logScanSeparator } from './utils/logger.js';
 
 // Given a Friday release date, return Thu–Sun (the opening weekend window).
 function openingWeekendDates(releaseDate: string): string[] {
@@ -19,6 +19,8 @@ function openingWeekendDates(releaseDate: string): string[] {
 
 async function runOnce(): Promise<void> {
   const config = loadConfig();
+
+  logScanSeparator();
 
   const today = new Date().toISOString().split('T')[0];
 

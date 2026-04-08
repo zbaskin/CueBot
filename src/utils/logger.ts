@@ -19,3 +19,14 @@ export function log(level: LogLevel, message: string): void {
     // ignore log file errors
   }
 }
+
+export function logScanSeparator(): void {
+  const timestamp = new Date().toISOString();
+  const line = `\n--- scan ${timestamp} ---\n`;
+  try {
+    mkdirSync(resolve(__dirname, '../../data'), { recursive: true });
+    appendFileSync(LOG_FILE, line);
+  } catch {
+    // ignore log file errors
+  }
+}
