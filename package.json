@@ -7,7 +7,8 @@
     "start": "tsx src/index.ts",
     "once": "tsx src/index.ts --once",
     "probe": "tsx src/scraper/probe.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "type": "module",
   "keywords": [],
@@ -29,6 +30,7 @@
     "@types/node-notifier": "^8.0.5",
     "@types/nodemailer": "^7.0.11",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vitest": "^2.1.9"
   }
 }

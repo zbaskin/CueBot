@@ -27,6 +27,12 @@ export interface EmailConfig {
   to: string;
 }
 
+export interface NtfyConfig {
+  enabled: boolean;
+  topic: string;
+  server?: string;
+}
+
 export interface Config {
   theater: string;
   pollingIntervalMinutes: number;
@@ -34,6 +40,7 @@ export interface Config {
   notifications: {
     desktop: boolean;
     email: EmailConfig;
+    ntfy?: NtfyConfig;
   };
 }
 
