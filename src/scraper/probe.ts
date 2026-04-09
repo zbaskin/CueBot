@@ -122,11 +122,24 @@ async function probePuppeteer(): Promise<void> {
     await page.setUserAgent(HEADERS['User-Agent']);
     await page.setExtraHTTPHeaders({ 'Accept-Language': 'en-US,en;q=0.9' });
 
+    // Intercept all network requests to find API calls
+    const apiCalls: { url: string; method: string; type: string }[] = [];
+    page.on('request', req => {
+      const url = req.url();
+      const type = req.resourceType();
+      if (type === 'xhr' || type === 'fetch' || url.includes('/api/') || url.includes('graphql')) {
+        apiCalls.push({ url, method: req.method(), type });
+      }
+    });
+
     console.log(`Navigating to: ${SHOWTIME_URL}`);
     await page.goto(SHOWTIME_URL, { waitUntil: 'networkidle2', timeout: 30000 });
 
     // Wait a moment for JS to render
     await new Promise(r => setTimeout(r, 3000));
+
+    console.log(`\n=== API/XHR calls intercepted (${apiCalls.length}) ===`);
+    apiCalls.forEach(c => console.log(`  [${c.method}] [${c.type}] ${c.url}`));
 
     const html = await page.content();
     console.log(`Page content length: ${html.length} bytes`);
