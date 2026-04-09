@@ -53,7 +53,7 @@ async function runOnce(): Promise<void> {
 
       const alerts = [
         ...checkOnSale(schedule.showtimes, onSaleDateMap.get(date) ?? []),
-        ...checkSeats(schedule.showtimes, seatDateMap.get(date) ?? []),
+        ...checkSeats(schedule.showtimes, seatDateMap.get(date) ?? [], config.seatAlertTtlMinutes * 60 * 1000),
       ];
 
       for (const alert of alerts) {
@@ -72,6 +72,7 @@ async function main(): Promise<void> {
   const once = process.argv.includes('--once');
 
   log('info', `CueBot started. Watching ${config.watches.length} item(s).`);
+  log('info', `Seat alert TTL: ${config.seatAlertTtlMinutes} minute(s).`);
   if (once) log('info', 'Running one poll cycle then exiting (--once).');
   else log('info', `Polling every ${config.pollingIntervalMinutes} minute(s). Ctrl+C to stop.`);
 

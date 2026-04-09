@@ -36,6 +36,7 @@ export interface NtfyConfig {
 export interface Config {
   theater: string;
   pollingIntervalMinutes: number;
+  seatAlertTtlMinutes: number;
   watches: Watch[];
   notifications: {
     desktop: boolean;
@@ -75,6 +76,10 @@ export function loadConfig(): Config {
 
   if (!raw.pollingIntervalMinutes || raw.pollingIntervalMinutes < 1) {
     throw new Error('config.json: pollingIntervalMinutes must be >= 1');
+  }
+
+  if (!raw.seatAlertTtlMinutes || raw.seatAlertTtlMinutes < 1) {
+    raw.seatAlertTtlMinutes = 30;
   }
 
   const dateFormat = /^\d{4}-\d{2}-\d{2}$/;

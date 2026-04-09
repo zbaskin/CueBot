@@ -4,13 +4,13 @@ import { hasAlerted, markAlerted } from './state.js';
 import type { Alert } from './ticket-monitor.js';
 import { normalizeTitle, titleMatches } from '../utils/title-match.js';
 
-export function checkSeats(showtimes: Showtime[], watches: SeatWatch[]): Alert[] {
+export function checkSeats(showtimes: Showtime[], watches: SeatWatch[], ttlMs: number): Alert[] {
   const alerts: Alert[] = [];
 
   for (const watch of watches) {
     const alertKey = `seat-available:${normalizeTitle(watch.movieTitle)}:${watch.date}:${watch.time.toLowerCase()}:${(watch.format ?? '').toLowerCase()}`;
 
-    if (hasAlerted(alertKey)) continue;
+    if (hasAlerted(alertKey, ttlMs)) continue;
 
     const match = showtimes.find(s =>
       titleMatches(s.movieTitle, watch.movieTitle) &&
@@ -33,7 +33,7 @@ export function checkSeats(showtimes: Showtime[], watches: SeatWatch[]): Alert[]
       url: match.url,
       message: `Seats ${statusLabel} for "${match.movieTitle}" on ${match.date} at ${match.time} (${match.format})!`,
     });
-    markAlerted(alertKey);
+    markAlerted(alertKey, false);
   }
 
   return alerts;

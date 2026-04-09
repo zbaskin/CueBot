@@ -27,7 +27,7 @@ export function checkOnSale(showtimes: Showtime[], watches: OnSaleWatch[]): Aler
     const matchedTitle = matchingShowtimes[0].movieTitle;
     const alertKey = `on-sale:${normalizeTitle(watch.movieTitle)}`;
 
-    if (hasAlerted(alertKey)) continue;
+    if (hasAlerted(alertKey, null)) continue;
 
     // Only fire if this is a newly seen movie (wasn't in the previous known list)
     const knownMovies = getKnownMovies();
@@ -35,7 +35,7 @@ export function checkOnSale(showtimes: Showtime[], watches: OnSaleWatch[]): Aler
 
     if (wasKnown) {
       // Mark as alerted so we don't keep checking
-      markAlerted(alertKey);
+      markAlerted(alertKey, true);
       continue;
     }
 
@@ -46,7 +46,7 @@ export function checkOnSale(showtimes: Showtime[], watches: OnSaleWatch[]): Aler
       url: sample.url,
       message: `Tickets on sale for "${matchedTitle}"! ${matchingShowtimes.length} showtime(s) available.`,
     });
-    markAlerted(alertKey);
+    markAlerted(alertKey, true);
   }
 
   // Update known movies list after processing
