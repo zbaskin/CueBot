@@ -27,28 +27,51 @@ export function parseShowtimes(html: string, date: string): TheaterSchedule {
       const formatLabel = $(formatSection).attr('aria-label') ?? '';
       const format = formatLabel.replace(' Showtimes', '').trim();
 
-      // Find all showtime links within this format section
+      // Available showtimes are <a href="/showtimes/{id}"> links
       $(formatSection).find('a[href^="/showtimes/"]').each((_, link) => {
         const href = $(link).attr('href') ?? '';
         const showtimeId = href.replace('/showtimes/', '');
         const isDisabled = $(link).attr('aria-disabled') === 'true';
 
-        // Time is the text content minus the sr-only span text
         const srOnlyText = $(link).find('.sr-only').text().trim();
         const fullText = $(link).text().trim();
         const time = fullText.replace(srOnlyText, '').trim();
 
-        // Only include entries that look like times
         if (!time || !/^\d{1,2}:\d{2}[ap]m$/i.test(time)) return;
 
-        const status = parseStatus(srOnlyText, isDisabled);
-
         showtimes.push({
+          showtimeId,
           movieTitle,
           date,
           time,
           format,
-          status,
+          status: parseStatus(srOnlyText, isDisabled),
+          url: `${BASE_URL}/showtimes/${showtimeId}`,
+        });
+      });
+
+      // Sold-out showtimes are <button disabled> — no href, ID is in adjacent div id="{id}-details"
+      $(formatSection).find('button[disabled]').each((_, btn) => {
+        const srOnlyText = $(btn).find('.sr-only').text().trim();
+        const fullText = $(btn).text().trim();
+        const time = fullText.replace(srOnlyText, '').trim();
+
+        if (!time || !/^\d{1,2}:\d{2}[ap]m$/i.test(time)) return;
+
+        // Extract ID from the sibling div id="{id}-details"
+        const detailsDiv = $(btn).next('[id$="-details"]');
+        const detailsId = detailsDiv.attr('id') ?? '';
+        const showtimeId = detailsId.replace('-details', '');
+
+        if (!showtimeId) return;
+
+        showtimes.push({
+          showtimeId,
+          movieTitle,
+          date,
+          time,
+          format,
+          status: 'soldOut',
           url: `${BASE_URL}/showtimes/${showtimeId}`,
         });
       });

@@ -18,6 +18,7 @@ export interface SeatWatch {
   date: string;
   time: string;
   format?: string;
+  showtimeId?: string;  // when known, match directly by ID — faster and unambiguous
 }
 
 export type Watch = OnSaleWatch | SeatWatch;

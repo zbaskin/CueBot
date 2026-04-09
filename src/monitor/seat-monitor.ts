@@ -13,10 +13,13 @@ export function checkSeats(showtimes: Showtime[], watches: SeatWatch[], ttlMs: n
     if (hasAlerted(alertKey, ttlMs)) continue;
 
     const match = showtimes.find(s =>
-      titleMatches(s.movieTitle, watch.movieTitle) &&
-      s.date === watch.date &&
-      s.time.toLowerCase() === watch.time.toLowerCase() &&
-      (!watch.format || normalizeTitle(s.format).includes(normalizeTitle(watch.format)) || normalizeTitle(watch.format).includes(normalizeTitle(s.format)))
+      // Prefer exact ID match when showtimeId is configured
+      watch.showtimeId
+        ? s.showtimeId === watch.showtimeId
+        : titleMatches(s.movieTitle, watch.movieTitle) &&
+          s.date === watch.date &&
+          s.time.toLowerCase() === watch.time.toLowerCase() &&
+          (!watch.format || normalizeTitle(s.format).includes(normalizeTitle(watch.format)) || normalizeTitle(watch.format).includes(normalizeTitle(s.format)))
     );
 
     if (!match) continue;
